@@ -22,5 +22,8 @@ class DatabaseSeeder extends Seeder
 
         // Vendor partner FG Wedding (banyak data)
         $this->call(VendorSeeder::class);
+
+        // Paket + mapping vendor (Essential ⊂ Classic ⊂ Premium)
+        $this->call(PackageSeeder::class);
     }
 }

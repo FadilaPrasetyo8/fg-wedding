@@ -2,19 +2,20 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { AuthLayout } from '@/layouts/auth-layout';
-import { Head, Link, router } from '@inertiajs/react';
-import { FormEvent, useState } from 'react';
+import { Head, Link, useForm } from '@inertiajs/react';
+import { FormEvent } from 'react';
 
 export default function Register() {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [passwordConfirmation, setPasswordConfirmation] = useState('');
+    const { data, setData, post, processing, errors } = useForm({
+        name: '',
+        email: '',
+        password: '',
+        password_confirmation: '',
+    });
 
     function handleSubmit(e: FormEvent) {
         e.preventDefault();
-        // Auth backend belum aktif — kembali ke beranda
-        router.visit('/');
+        post('/register');
     }
 
     return (
@@ -22,7 +23,7 @@ export default function Register() {
             <Head title="Daftar" />
             <AuthLayout
                 title="Buat akun"
-                subtitle="Mulai perencanaan pernikahan bersama FG Wedding."
+                subtitle="Daftar untuk memakai FG Wedding AI Blueprint."
             >
                 <form onSubmit={handleSubmit} className="space-y-5">
                     <div>
@@ -32,10 +33,15 @@ export default function Register() {
                             type="text"
                             autoComplete="name"
                             required
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
+                            value={data.name}
+                            onChange={(e) => setData('name', e.target.value)}
                             placeholder="Alya Putri"
                         />
+                        {errors.name ? (
+                            <p className="mt-1.5 text-sm text-red-300">
+                                {errors.name}
+                            </p>
+                        ) : null}
                     </div>
                     <div>
                         <Label htmlFor="email">Email</Label>
@@ -44,10 +50,15 @@ export default function Register() {
                             type="email"
                             autoComplete="email"
                             required
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            value={data.email}
+                            onChange={(e) => setData('email', e.target.value)}
                             placeholder="nama@email.com"
                         />
+                        {errors.email ? (
+                            <p className="mt-1.5 text-sm text-red-300">
+                                {errors.email}
+                            </p>
+                        ) : null}
                     </div>
                     <div>
                         <Label htmlFor="password">Password</Label>
@@ -56,11 +67,16 @@ export default function Register() {
                             type="password"
                             autoComplete="new-password"
                             required
-                            minLength={10}
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            placeholder="Minimal 10 karakter"
+                            minLength={8}
+                            value={data.password}
+                            onChange={(e) => setData('password', e.target.value)}
+                            placeholder="Minimal 8 karakter"
                         />
+                        {errors.password ? (
+                            <p className="mt-1.5 text-sm text-red-300">
+                                {errors.password}
+                            </p>
+                        ) : null}
                     </div>
                     <div>
                         <Label htmlFor="password_confirmation">
@@ -71,16 +87,21 @@ export default function Register() {
                             type="password"
                             autoComplete="new-password"
                             required
-                            minLength={10}
-                            value={passwordConfirmation}
+                            minLength={8}
+                            value={data.password_confirmation}
                             onChange={(e) =>
-                                setPasswordConfirmation(e.target.value)
+                                setData('password_confirmation', e.target.value)
                             }
                             placeholder="Ulangi password"
                         />
                     </div>
-                    <Button type="submit" className="w-full" size="lg">
-                        Daftar
+                    <Button
+                        type="submit"
+                        className="w-full"
+                        size="lg"
+                        disabled={processing}
+                    >
+                        {processing ? 'Mendaftar…' : 'Daftar'}
                     </Button>
                 </form>
                 <p className="mt-6 text-sm text-[var(--color-cream-muted)]">

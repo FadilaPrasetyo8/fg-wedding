@@ -2,17 +2,19 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { AuthLayout } from '@/layouts/auth-layout';
-import { Head, Link, router } from '@inertiajs/react';
-import { FormEvent, useState } from 'react';
+import { Head, Link, useForm } from '@inertiajs/react';
+import { FormEvent } from 'react';
 
 export default function Login() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const { data, setData, post, processing, errors } = useForm({
+        email: '',
+        password: '',
+        remember: false,
+    });
 
     function handleSubmit(e: FormEvent) {
         e.preventDefault();
-        // Auth backend belum aktif — kembali ke beranda
-        router.visit('/');
+        post('/login');
     }
 
     return (
@@ -20,7 +22,7 @@ export default function Login() {
             <Head title="Masuk" />
             <AuthLayout
                 title="Masuk"
-                subtitle="Lanjutkan perencanaan pernikahan Anda."
+                subtitle="Login untuk mengakses FG Wedding AI Blueprint."
             >
                 <form onSubmit={handleSubmit} className="space-y-5">
                     <div>
@@ -30,10 +32,15 @@ export default function Login() {
                             type="email"
                             autoComplete="email"
                             required
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            value={data.email}
+                            onChange={(e) => setData('email', e.target.value)}
                             placeholder="nama@email.com"
                         />
+                        {errors.email ? (
+                            <p className="mt-1.5 text-sm text-red-300">
+                                {errors.email}
+                            </p>
+                        ) : null}
                     </div>
                     <div>
                         <Label htmlFor="password">Password</Label>
@@ -42,13 +49,34 @@ export default function Login() {
                             type="password"
                             autoComplete="current-password"
                             required
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            value={data.password}
+                            onChange={(e) => setData('password', e.target.value)}
                             placeholder="••••••••"
                         />
+                        {errors.password ? (
+                            <p className="mt-1.5 text-sm text-red-300">
+                                {errors.password}
+                            </p>
+                        ) : null}
                     </div>
-                    <Button type="submit" className="w-full" size="lg">
-                        Masuk
+                    <label className="flex items-center gap-2 text-sm text-[var(--color-cream-muted)]">
+                        <input
+                            type="checkbox"
+                            checked={data.remember}
+                            onChange={(e) =>
+                                setData('remember', e.target.checked)
+                            }
+                            className="rounded border-[var(--color-cream)]/30"
+                        />
+                        Ingat saya
+                    </label>
+                    <Button
+                        type="submit"
+                        className="w-full"
+                        size="lg"
+                        disabled={processing}
+                    >
+                        {processing ? 'Masuk…' : 'Masuk'}
                     </Button>
                 </form>
                 <p className="mt-6 text-sm text-[var(--color-cream-muted)]">

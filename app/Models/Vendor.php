@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -67,5 +68,12 @@ class Vendor extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(VendorCategory::class, 'category_id');
+    }
+
+    public function packages(): BelongsToMany
+    {
+        return $this->belongsToMany(Package::class, 'package_vendor')
+            ->withPivot(['sort_order', 'role_note'])
+            ->withTimestamps();
     }
 }
