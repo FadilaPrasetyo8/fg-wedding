@@ -1,0 +1,173 @@
+@import 'tailwindcss';
+
+@source '../views';
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../js';
+
+@theme {
+    --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Cormorant Garamond', ui-serif, Georgia, serif;
+    --font-serif: 'Source Serif 4', ui-serif, Georgia, serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+    /* Palet dari Paket Resmi — dark botanical */
+    --color-ink: #fbf8f3;
+    --color-ink-muted: #b8c0b9;
+    --color-paper: #2f4033;
+    --color-paper-elevated: #3a4d3e;
+    --color-brand: #fbf8f3;
+    --color-brand-soft: #4a5f4e;
+    --color-accent: #c4a484;
+    --color-line: rgba(251, 248, 243, 0.12);
+    --color-success: #8fbf9a;
+    --color-warning: #e0b87a;
+    --color-danger: #e8a0a8;
+
+    --color-deep: #243328;
+    --color-deeper: #1a241d;
+    --color-cream: #fbf8f3;
+    --color-cream-muted: #d5ddd6;
+    --color-bronze: #c4a484;
+    --color-bronze-deep: #a88462;
+}
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        @apply antialiased;
+        color: var(--color-cream);
+        background-color: var(--color-deep);
+        background-image:
+            radial-gradient(
+                ellipse 100% 70% at 0% -10%,
+                color-mix(in srgb, var(--color-bronze) 12%, transparent),
+                transparent 50%
+            ),
+            radial-gradient(
+                ellipse 80% 50% at 100% 20%,
+                color-mix(in srgb, #5a7260 35%, transparent),
+                transparent 45%
+            ),
+            linear-gradient(180deg, var(--color-deep) 0%, var(--color-deeper) 100%);
+        background-attachment: fixed;
+    }
+
+    ::selection {
+        background: color-mix(in srgb, var(--color-bronze) 40%, transparent);
+        color: var(--color-cream);
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--color-bronze);
+        outline-offset: 3px;
+    }
+}
+
+@layer utilities {
+    .font-display {
+        font-family: var(--font-display);
+    }
+
+    .font-serif-body {
+        font-family: var(--font-serif);
+    }
+
+    .text-balance {
+        text-wrap: balance;
+    }
+
+    .eyebrow {
+        font-family: var(--font-sans);
+        font-size: 0.6875rem;
+        font-weight: 500;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--color-bronze);
+    }
+
+    .section-pad {
+        @apply px-5 py-20 sm:px-8 sm:py-28;
+    }
+
+    .nav-glass {
+        background: color-mix(in srgb, var(--color-deep) 88%, transparent);
+        backdrop-filter: blur(18px) saturate(1.15);
+        -webkit-backdrop-filter: blur(18px) saturate(1.15);
+        border-bottom: 1px solid rgba(251, 248, 243, 0.08);
+    }
+
+    .surface-panel {
+        background: color-mix(in srgb, var(--color-paper-elevated) 55%, var(--color-deep));
+        border: 1px solid rgba(251, 248, 243, 0.08);
+    }
+
+    .img-kenburns {
+        animation: kenburns 22s ease-out both;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .motion-safe\:animate-fade-up,
+        .motion-safe\:animate-fade-in,
+        .motion-safe\:animate-reveal,
+        .img-kenburns {
+            animation: none !important;
+            opacity: 1 !important;
+            transform: none !important;
+        }
+    }
+}
+
+@keyframes fade-up {
+    from {
+        opacity: 0;
+        transform: translateY(22px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes reveal-image {
+    from {
+        opacity: 0;
+        transform: scale(1.06);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes kenburns {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.08);
+    }
+}
+
+.animate-fade-up {
+    animation: fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-fade-in {
+    animation: fade-in 0.8s ease-out both;
+}
+
+.animate-reveal {
+    animation: reveal-image 1.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
